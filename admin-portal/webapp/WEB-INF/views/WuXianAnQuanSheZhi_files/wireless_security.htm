@@ -1,0 +1,528 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0042)http://192.168.0.254/wireless_security.asp -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<meta http-equiv="Pragma" content="no-cache">
+
+<title>LAN | LAN Settings</title>
+<script language="JavaScript" src="gozila.js" type="text/javascript"></script>
+<script language="JavaScript" src="menu.js" type="text/javascript"></script>
+<script language="JavaScript" src="table.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+var secs;
+var timerID = null;
+var timerRunning = false;
+var timeout = 10;
+var delay = 1000;
+
+var SSID;			//ssid
+var Secumode;		//安全模式
+var AuthMode;		//WEP加密方式；share/open
+var EncrypType;		//wpa加密规则
+var DefaultKeyID;	//WEP加密中第几组密钥
+var Key1Type;		//密钥1加密类型，ASCII/HEX
+var Key1Str;		//密钥1
+var Key2Type;		//密钥2加密类型
+var Key2Str;		//密钥2
+var Key3Type;		//密钥3加密类型
+var Key3Str;		//密钥3
+var Key4Type;		//密钥4加密类型
+var Key4Str;		//密钥4
+var WPAPSK;			//wpa密码
+var Wepenable;		//wep开关状态
+var RekeyInterval;	//密钥更新周期
+var WirelessEnable;	//无线开关状态
+
+function InitializeTimer(){
+    secs = timeout;
+    StopTheClock();
+    StartTheTimer();
+}
+
+function StopTheClock(){
+    if(timerRunning)
+        clearTimeout(timerID);
+    timerRunning = false;
+}
+
+function StartTheTimer(){
+    if (secs==0){
+		StopTheClock();	
+		secs = timeout;
+		StartTheTimer();
+    }else{
+        secs = secs - 1;
+        timerRunning = true;
+        timerID = self.setTimeout("StartTheTimer()", delay);
+    }
+}
+
+function init(){
+		makeRequest("/goform/wirelessGetSecurity", "something");
+}
+
+var http_request = false;
+function makeRequest(url, content) {
+	http_request = false;
+	if (window.XMLHttpRequest) { // Mozilla, Safari,...
+		http_request = new XMLHttpRequest();
+		if (http_request.overrideMimeType) {
+			http_request.overrideMimeType('text/xml');
+		}
+	} else if (window.ActiveXObject) { // IE
+		try {
+			http_request = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch (e) {
+			try {
+			http_request = new ActiveXObject("Microsoft.XMLHTTP");
+			} catch (e) {}
+		}
+	}
+	if (!http_request) {
+		alert('警告：不可以创建XMLHTTP实例。');
+		return false;
+	}
+	http_request.onreadystatechange = alertContents;
+	http_request.open('POST', url, true);
+	http_request.send(content);
+}
+
+
+function alertContents() {
+	if (http_request.readyState == 4) {
+		if (http_request.status == 200) {
+			//alert(http_request.responseText);
+			
+			parseAllData(http_request.responseText);	
+			initSecuMode();
+			UpdateMBSSIDList();
+			LoadFields();
+			InitializeTimer();
+		} 
+	}
+}
+
+function parseAllData(str)
+{
+		fields_str = str.split("\r");
+		SSID = fields_str[0];
+		Secumode = fields_str[1];
+		AuthMode = fields_str[2];
+		EncrypType = fields_str[3];
+		DefaultKeyID = fields_str[4];
+		Key1Type = fields_str[5];
+		Key1Str = fields_str[6];
+		Key2Type = fields_str[7];
+		Key2Str = fields_str[8];
+		Key3Type = fields_str[9];
+		Key3Str = fields_str[10];
+		Key4Type = fields_str[11];
+		Key4Str = fields_str[12];
+		WPAPSK = fields_str[13];
+		Wepenable = fields_str[14];
+		RekeyInterval = fields_str[15];		// 2.4G & 5G
+		WirelessEnable = fields_str[16];
+/*		alert("SSID: "+SSID);
+		alert("Secumode: "+Secumode);
+		alert("AuthMode: "+AuthMode);
+		alert("EncrypType: "+EncrypType);
+		alert("DefaultKeyID: "+DefaultKeyID);
+		alert("Wepenable: "+Wepenable);
+		alert("RekeyInterval: "+RekeyInterval);
+		alert("WirelessEnable: "+WirelessEnable);*/
+}
+
+function initSecuMode()
+{
+	if(AuthMode == "0" && Secumode == "" && Wepenable == "disabled" )
+		document.getElementById("security_mode").selectedIndex = 0;
+	if(AuthMode == "0" && Secumode == "psk" &&  Wepenable == "disabled")
+		document.getElementById("security_mode").selectedIndex = 2;
+	if(AuthMode == "0" && Secumode == "psk2" &&  Wepenable == "disabled")
+		document.getElementById("security_mode").selectedIndex = 3;
+	if(AuthMode == "0" && (Secumode == "psk psk2") &&  Wepenable == "disabled")
+		document.getElementById("security_mode").selectedIndex = 4;
+	if(AuthMode == "0" && Secumode == "0" && Wepenable == "enabled")//open
+	{
+		document.getElementById("security_mode").selectedIndex = 1;
+		document.getElementById("security_shared_mode").selectedIndex = 0;
+	}
+	if(AuthMode == "1" && Secumode == "1" && Wepenable == "enabled")//share
+	{
+		document.getElementById("security_mode").selectedIndex = 1;	
+		document.getElementById("security_shared_mode").selectedIndex = 1;	
+	}
+}
+
+function UpdateMBSSIDList()
+{
+	document.getElementById("ssid").innerHTML =  "&nbsp;&nbsp;&nbsp;&nbsp;网络主SSID -- "+"\""+SSID+"\"";
+}
+
+function LoadFields(){
+	var result;	
+	// WEP
+	document.getElementById("WEP1").value = Key1Str;
+	document.getElementById("WEP2").value = Key2Str;
+	document.getElementById("WEP3").value = Key3Str;
+	document.getElementById("WEP4").value = Key4Str;
+
+	document.getElementById("WEP1Select").selectedIndex = (Key1Type == "0" ? 1 : 0);
+	document.getElementById("WEP2Select").selectedIndex = (Key2Type == "0" ? 1 : 0);
+	document.getElementById("WEP3Select").selectedIndex = (Key3Type == "0" ? 1 : 0);
+	document.getElementById("WEP4Select").selectedIndex = (Key4Type == "0" ? 1 : 0);
+
+	document.getElementById("wep_default_key").selectedIndex = parseInt(DefaultKeyID) - 1 ;
+
+	// WPA
+	if(EncrypType == "tkip")
+		document.security_form.cipher[1].checked = true;
+	else if(EncrypType == "aes")
+		document.security_form.cipher[0].checked = true;
+	else if(EncrypType == "tkip+aes")
+		document.security_form.cipher[2].checked = true;
+	document.getElementById("passphrase").value = WPAPSK;
+	document.getElementById("keyRenewalInterval").value = RekeyInterval;		
+	securityMode(0);	
+}
+
+function securityMode(c_f){
+	var security_mode;
+
+	document.getElementById("div_security_shared_mode").style.display = "none";
+	hideWep();
+	hideWpa();
+	document.security_form.cipher[0].disabled = true;
+	document.security_form.cipher[1].disabled = true;
+	document.security_form.cipher[2].disabled = true;
+	document.security_form.passphrase.disabled = true;
+	document.security_form.keyRenewalInterval.disabled = true;
+	security_mode = document.security_form.security_mode.value;
+	
+    if (security_mode == "1"){
+		showWep(security_mode);
+	}else if (security_mode == "psk" || security_mode == "psk2" || security_mode == "psk psk2"){
+		<!-- WPA -->
+		showWpa();
+		document.security_form.cipher[0].disabled = false;
+		document.security_form.cipher[1].disabled = false;
+		if(security_mode == "psk" && document.security_form.cipher[2].checked)
+			document.security_form.cipher[2].checked = false;
+		 if(security_mode == "psk2" || security_mode == "psk psk2")
+			document.security_form.cipher[2].disabled = false;
+		document.security_form.passphrase.disabled = false;
+		document.security_form.keyRenewalInterval.disabled = false;
+	}
+}
+
+function hideWpa(){
+	document.getElementById("div_wpa").style.display = "none";
+	document.getElementById("div_wpa1").style.display = "none";
+	document.getElementById("div_wpa2").style.display = "none";
+}
+
+function showWpa(){
+	document.getElementById("div_wpa").style.display = "";
+	document.getElementById("div_wpa1").style.display = "";
+	document.getElementById("div_wpa2").style.display = "";
+}
+
+function hideWep()
+{
+	document.getElementById("div_wep").style.display = "none";
+	document.getElementById("div_wep1").style.display = "none";
+	document.getElementById("div_wep2").style.display = "none";
+	document.getElementById("div_wep3").style.display = "none";
+	document.getElementById("div_wep4").style.display = "none";
+}
+
+function showWep(mode)
+{
+	<!-- WEP -->
+		document.getElementById("div_wep").style.display = "";
+		document.getElementById("div_wep1").style.display = "";
+		document.getElementById("div_wep2").style.display = "";
+		document.getElementById("div_wep3").style.display = "";
+		document.getElementById("div_wep4").style.display = "";
+		document.getElementById("div_security_shared_mode").style.display ="";
+}
+
+function preSubmit(){
+	if(WirelessEnable==0){
+		alert("请先开启无线网络！");
+		return;
+	}
+	if (checkData() == true){
+		document.security_form.submit();
+	}
+}
+
+function checkAllNum(str){
+    for (var i=0; i<str.length; i++){
+        if(str.charAt(i) >= '0' && str.charAt(i) <= '9') //|| (str.charAt(i) == '.' ))
+            continue;
+        return false;
+    }
+    return true;
+}
+
+function checkData(){
+	var securitymode;
+	securitymode = document.security_form.security_mode.value;
+	if (securitymode == "0" || securitymode == "1")
+	{
+		return check_Wep(securitymode);
+	}else  if (securitymode == "psk" || securitymode == "psk2" || securitymode == "psk psk2" ){
+		var keyvalue = document.security_form.passphrase.value;
+		if (keyvalue.length == 0){
+			alert('请输入密钥!');
+			return false;
+		}
+		if ((keyvalue.length < 8) || (keyvalue.length > 63)){
+			alert('密钥范围: 8~63 个字符!');
+			return false;
+		}
+		if(!checkInjection(document.security_form.passphrase.value)){
+			alert("密钥包含非法字符(只能含0-9,a-z,A-Z,@,*,-,_)！");
+			return false;
+		}
+		if(document.security_form.cipher[0].checked != true && 
+		   document.security_form.cipher[1].checked != true &&
+   		   document.security_form.cipher[2].checked != true){
+   		   alert('请选择一个WPA加密规则。');
+   		   return false;
+		}
+		if(check_wpa() == false)
+			return false;
+	}
+	return true;
+}
+
+var illegal_user_pass = new Array("'",";","\"",",","\\","%","&");
+
+function check_wpa(){
+		if(document.security_form.cipher[0].checked != true && 
+		   document.security_form.cipher[1].checked != true &&
+   		   document.security_form.cipher[2].checked != true){
+   		   alert('请选择一个WPA加密规则。');
+   		   return false;
+		}
+		//document.form[0].keyRenewalInterval.value=parseInt(document.forms[0].keyRenewalInterval.value,10);
+		document.forms[0].keyRenewalInterval.value=parseInt(document.forms[0].keyRenewalInterval.value,10);
+		var t=document.security_form.keyRenewalInterval.value;
+		if(checkAllNum(t) == false){
+			alert('请输入一个有效的密钥更新周期。');
+			return false;
+		}
+		if(t < 0){
+			alert('警告：密钥更新周期太短,范围：0~99999');
+			return false;
+		}
+		if (t == 0)
+		{
+			alert('提示：周期为0时，密钥不更新。');
+		}
+		return true;
+}
+
+function check_Wep(securitymode)
+{
+	var defaultid = document.security_form.wep_default_key.value;
+
+	if ( defaultid == 1 )
+		var keyvalue = document.security_form.WEP1.value;
+	else if (defaultid == 2)
+		var keyvalue = document.security_form.WEP2.value;
+	else if (defaultid == 3)
+		var keyvalue = document.security_form.WEP3.value;
+	else if (defaultid == 4)
+		var keyvalue = document.security_form.WEP4.value;
+		
+	if (keyvalue.length == 0 &&  (securitymode == "1" || securitymode == "0")){ // shared wep  || md5
+		alert('请输入WEP密钥'+defaultid+' !');
+		return false;
+	}	
+/* huangxiaoli modify */
+	for(var i=1;i<=4;i++)
+	{
+		var keylength  = document.getElementById("WEP"+i).value.length;
+		
+		if (keylength != 0){
+			if (document.getElementById("WEP"+i+"Select").options.selectedIndex == 0){
+				if(keylength != 5 && keylength != 13) {
+					alert('WEP密钥'+i+'无效，请输入5或13个有效ASCII码！');
+					return false;
+				}
+				if(checkInjection(document.getElementById("WEP"+i).value)== false){
+					alert('WEP密钥'+i+'包含无效字符(只能含0-9,a-z,A-Z,@,*,-,_)。');
+					return false;
+				}
+			}
+			if (document.getElementById("WEP"+i+"Select").options.selectedIndex == 1){
+				if(keylength != 10 && keylength != 26) {
+					alert('WEP密钥'+i+'无效，请输入10或26个有效Hex码！');
+					return false;
+				}
+				if(checkHex(document.getElementById("WEP"+i).value) == false){
+					alert('WEP密钥'+i+'包含无效字符(只能含0-9,a-f,A-F)。');
+					return false;
+				}
+			}
+		}
+	}/* end for */
+	return true;	
+}
+/* 使用checkInjection代替
+function ill_check(val, ill_array, str)
+{
+	var i = 0;
+	for(; i< ill_array.length; i++)
+	{
+		if (val.indexOf(ill_array[i]) != -1)
+		{
+			alert(str+" 有非法字符: "+ill_array[i]);
+			return false;
+		}
+	}
+	return true;
+} */
+
+function checkHex(str){
+	var reg = /[^0-9a-fA-F]{1}/;
+	if(reg.test(str))
+		return false;
+	else
+		return true;
+}
+
+</script>
+<link href="globe.css" type="text/css" rel="stylesheet">
+</head>
+<body leftmargin="0" topmargin="0" marginheight="0" marginwidth="0" onload="init();" class="bg">
+<div class="main">
+<table class="main">
+  <tbody><tr>
+    <td width="720" valign="top">
+      <table cellspacing="0" id="table2">
+        <tbody><tr>
+          <td class="titleCell" style="padding-left: 6px;">无线安全设置</td>
+        </tr>
+        <tr>
+          <td height="10"></td>
+        </tr>
+		<tr>
+		<td id="ssid" name="ssid" align="left" colspan="3">&nbsp;&nbsp;&nbsp;&nbsp;网络主SSID -- "HP_02D498"</td>
+		</tr>
+        <tr>
+          <td>
+            <table cellpadding="5" border="0">
+			<form action="http://192.168.0.254/goform/wirelessSetSecurity" method="post" name="security_form" id="security_form"></form>
+        <!--<input type=hidden name="ssidIndex" value="0" >-->
+        <input type="hidden" id="GO" name="GO" value="wireless_security.asp">
+              <tbody><tr id="div_security_infra_mode" name="div_security_infra_mode">
+                <td width="100" nowrap="">安全模式：</td>
+				<td width="590" colspan="2">
+            <select name="security_mode" size="1" id="security_mode" onchange="securityMode(1)">
+                <option value="Disable">禁用</option>
+                <option value="1">WEP</option>
+                <option value="psk">WPA - PSK</option>
+                <option value="psk2">WPA2 - PSK</option>
+                <option value="psk psk2">Mixed WPA/WPA2 - PSK</option>
+              </select>
+				</td>
+              </tr>
+              <tr id="div_security_shared_mode" name="div_security_shared_mode" style=""> 
+        	<td>加密类型：</td>
+			<td colspan="2">
+            <select name="security_shared_mode" id="security_shared_mode" size="1">
+			<option value="0">OPEN</option>
+            <option value="enable">Shared</option>
+            <!--<option value=None>None</option> delete by stanley 2010/08/31-->
+            </select>        
+            </td>
+        </tr>
+        <!-- WEP -->
+        <tr id="div_wep" style="">
+        	<td> 默认密钥：</td>
+			<td colspan="2">
+            <select name="wep_default_key" id="wep_default_key" size="1">
+            <option value="1" selected="selected">密钥 1</option>
+            <option value="2">密钥 2</option>
+            <option value="3">密钥 3</option>
+            <option value="4">密钥 4</option>
+            </select></td>
+        </tr>        
+        <tr id="div_wep1" style=""> 
+            <td nowrap="">WEP密钥1：</td>
+			<td>
+            <input name="WEP1" id="WEP1" maxlength="26" value=""></td>
+            <td width="180"><select id="WEP1Select" name="WEP1Select"> 
+            <option value="1">ASCII</option>
+            <option value="0">Hex</option>
+            </select></td>
+        </tr>        
+        <tr id="div_wep2" style=""> 
+        <td>WEP密钥2：</td>
+		<td>
+            <input name="WEP2" id="WEP2" maxlength="26" value=""></td>
+            <td><select id="WEP2Select" name="WEP2Select">
+            <option value="1">ASCII</option>
+            <option value="0">Hex</option>
+            </select></td>
+        </tr>
+        <tr id="div_wep3" style=""> 
+            <td>WEP密钥3：</td>
+			<td>
+            <input name="WEP3" id="WEP3" maxlength="26" value=""></td>
+            <td><select id="WEP3Select" name="WEP3Select">
+            <option value="1">ASCII</option>
+            <option value="0">Hex</option>
+            </select></td>
+        </tr>
+        <tr id="div_wep4" style=""> 
+            <td>WEP密钥4：</td>
+            <td>
+            <input name="WEP4" id="WEP4" maxlength="26" value=""></td>
+            <td><select id="WEP4Select" name="WEP4Select">
+            <option value="1">ASCII</option>
+            <option value="0">Hex</option>
+            </select></td>
+        </tr>
+        <!-- WPA -->
+        <tr id="div_wpa" name="div_wpa" style="display: none;"> 
+            <td width="150" nowrap="">WPA加密规则：</td>
+			<td colspan="2">
+             <input name="cipher" id="cipher" value="aes" type="radio" checked="checked" disabled="">AES &nbsp;
+              <input name="cipher" id="cipher" value="tkip" type="radio" disabled="">TKIP &nbsp;
+              <input name="cipher" id="cipher" value="tkip+aes" type="radio" disabled="">TKIP&amp;AES &nbsp;
+            </td>
+        </tr>
+        <tr id="div_wpa1" name="div_wpa1" style="display: none;">
+            <td>密钥：</td>
+			<td colspan="2">
+              <input name="passphrase" id="passphrase" size="28" maxlength="63" value="" disabled=""></td>
+        </tr>        
+        <tr id="div_wpa2" name="div_wpa2" style="display: none;">
+            <td>密钥更新周期：</td>
+			<td colspan="2">
+          <input name="keyRenewalInterval" id="keyRenewalInterval" size="4" maxlength="5" value="" disabled=""> 秒</td>
+        </tr>				
+        
+    </tbody></table>
+          </td>
+        </tr>
+      </tbody></table>
+    </td>
+    <td width="100" align="center" valign="top">
+      <table cellspacing="0" id="table1">
+        <tbody><tr>
+          <td>
+          <script>tbl_tail_save("document.security_form",'wl_security');</script></td><td class="vline" rowspan="3"></td><td rowspan="3" valign="top" width="80" align="center"><br><input class="actButton" type="button" value="保 存" onmouseover="style.color=&#39;#ff9933&#39;" onmouseout="style.color=&#39;#000000&#39;" onclick="preSubmit(document.security_form)"><br><br><input class="actButton" type="button" value="还 原" onmouseover="style.color=&#39;#f93&#39;" onmouseout="style.color=&#39;#000000&#39;" onclick="window.location.reload()"><br><br><input class="actButton" type="button" value="帮 助" onmouseover="style.color=&#39;#f93&#39;" onmouseout="style.color=&#39;#000000&#39;" onclick="doHelp(&#39;wl_security&#39;)" style="color: rgb(0, 0, 0);"></td></tr><tr><td class="hline" colspan="2"></td><td style="height:1px;"></td><td></td></tr></tbody></table>
+          </td>
+        </tr>
+      </tbody></table>
+    
+  
+
+</div>
+
+</body></html>

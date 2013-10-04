@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0035)http://192.168.0.254/menu_admin.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>系统菜单</title>
+
+<meta http-equiv="Pragma" content="no-cache">
+<script language="javascript" type="text/javascript" src="vmenu.js"></script>
+<script language="javascript" type="text/javascript" src="navigatortab.js"></script>
+<script language="javascript" type="text/javascript" src="navigator.js"></script>
+<script language="javascript" type="text/javascript" src="menu_admin.js"></script>
+<link type="text/css" rel="stylesheet" href="menu_admin.css">
+</head>
+<body bgcolor="#0096db" style="margin:0px;" onload="pageLoaded();" marginwidth="0" marginheight="0">
+<table border="0">
+  <tbody><tr>
+    <td width="15">&nbsp;</td>
+    <td valign="top">
+      <br><br><table width="140" border="0" cellpadding="5" cellspacing="0">
+        <tbody><tr>
+          <td height="40"></td>
+        </tr>
+        <tr>
+          <td class="Bborder">
+            <a target="main" href="http://192.168.0.254/lanStatus.asp" onclick="selectMenu(&#39;ap_systemStatus&#39;)"><img name="ap_systemStatus" src="item_nosel.gif" border="0">系统状态</a>
+          </td>
+        </tr>
+        <tr>
+          <td><div id="systemStatus"></div></td>
+        </tr>
+        <tr>
+          <td class="Bborder">
+            <a target="main" href="http://192.168.0.254/lanSetting.asp" onclick="selectMenu(&#39;ap_basicSetting&#39;)"><img name="ap_basicSetting" src="item_nosel.gif" border="0">基本设置</a>
+          </td>
+        </tr>
+        <tr>
+          <td><div id="basicSetting"></div></td>
+        </tr>
+        <tr>
+          <td class="Bborder">
+            <a target="main" href="wireless_basic.htm" onclick="selectMenu(&#39;ap_wlanSetting&#39;)"><img name="ap_wlanSetting" src="item_redsel.gif" border="0">WLAN设置</a>
+          </td>
+        </tr>
+        <tr>
+          <td><div id="wlanSetting"><table width="120" border="0" cellpadding="2" cellspacing="0"><tbody><tr><td width="5"></td><td><a target="main" href="wireless_basic.htm" onclick="selectItem(&#39;ap_wlBasicSet&#39;,2,0)"><img name="ap_wlBasicSet" src="item_sel.gif" border="0">无线基本设置</a></td></tr><tr><td width="5"></td><td><a target="main" href="http://192.168.0.254/wireless_security.asp" onclick="selectItem(&#39;ap_wlSecSet&#39;,2,1)"><img name="ap_wlSecSet" src="item_nosel.gif" border="0">无线安全设置</a></td></tr></tbody></table></div></td>
+        </tr>
+        <tr>
+          <td class="">
+            <a target="main" href="http://192.168.0.254/softwareUpgrade.asp" onclick="selectMenu(&#39;ap_systemTools&#39;)"><img name="ap_systemTools" src="item_nosel.gif" border="0">系统工具</a>
+          </td>
+        </tr>
+        <tr>
+          <td><div id="systemTools"></div></td>
+        </tr>
+        <tr>
+          <td><div id="wlEncryptManage"></div></td>
+        </tr>
+        <tr>
+          <td class="Bborder">
+            <a href="javascript:preLogout();" onclick="selectMenu(&#39;pic_exit&#39;)"><img name="pic_exit" src="item_nosel.gif" border="0">退出</a>
+          </td>
+        </tr>
+        <tr>
+          <td style="height:25px"></td>
+        </tr>
+        <tr> 
+		  <td class="RememberSave"><b>注意:</b><br>重启前请保存</td>
+        </tr>
+		
+		
+		<tr>
+		<td height="50px"><a style="font-size:20px" href="javascript:online()" onmousemove="#ffff00" onmouseout="#ffffff"><b>&nbsp;联系我们</b></a></td>
+        </tr><tr>
+      </tr></tbody></table>
+    </td>
+  </tr>
+</tbody></table>
+
+</body></html>

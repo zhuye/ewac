@@ -1,0 +1,534 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0039)http://192.168.0.254/wireless_basic.asp -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=GBK">
+
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
+<title>基本设置</title>
+<script language="JavaScript" src="table.js" type="text/javascript"></script>
+<script language="JavaScript" src="gozila.js" type="text/javascript"></script>
+<script language="JavaScript" src="menu.js" type="text/javascript"></script>
+<!--<SCRIPT language=JavaScript src="js/wireless_basic.js"></SCRIPT>-->
+<script type="text/javascript">
+var PhyMode;
+var	broadcastssidEnable;
+var	channel_value;
+var	ht_bw;
+var	ht_extcha;
+var	enablewireless;
+var	wmmCapable;
+var	APSDCapable;
+var	SSID;
+var ap_isolate;
+var shootPower;
+
+var countryOptLen = 13;
+
+var ChannelList = new Array(14);
+ChannelList[0] = "Auto";
+ChannelList[1] = "2412MHz (Channel 1)";
+ChannelList[2] = "2417MHz (Channel 2)";
+ChannelList[3] = "2422MHz (Channel 3)";
+ChannelList[4] = "2427MHz (Channel 4)";
+ChannelList[5] = "2432MHz (Channel 5)";
+ChannelList[6] = "2437MHz (Channel 6)";
+ChannelList[7] = "2442MHz (Channel 7)";
+ChannelList[8] = "2447MHz (Channel 8)";
+ChannelList[9] = "2452MHz (Channel 9)";
+ChannelList[10] = "2457MHz (Channel 10)";
+ChannelList[11] = "2462MHz (Channel 11)";
+ChannelList[12] = "2467MHz (Channel 12)";
+ChannelList[13] = "2472MHz (Channel 13)";
+ChannelList[14] = "2484MHz (Channel 14)";
+
+
+var http_request = false;
+function makeRequest(url, content) {
+	http_request = false;
+	if (window.XMLHttpRequest) { // Mozilla, Safari,...
+		http_request = new XMLHttpRequest();
+		if (http_request.overrideMimeType) {
+			http_request.overrideMimeType('text/xml');
+		}
+	} else if (window.ActiveXObject) { // IE
+		try {
+			http_request = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch (e) {
+			try {
+			http_request = new ActiveXObject("Microsoft.XMLHTTP");
+			} catch (e) {}
+		}
+	}
+	if (!http_request) {
+		alert('Giving up :( Cannot create an XMLHTTP instance');
+		return false;
+	}
+	http_request.onreadystatechange = alertContents;
+	http_request.open('POST', url, true);
+	http_request.send(content);
+}
+function alertContents() {
+	if (http_request.readyState == 4) {
+		if (http_request.status == 200) {
+		 	var str=http_request.responseText.split("\r");
+			//2.4G			
+			PhyMode = str[0];
+			broadcastssidEnable = str[1];
+			channel_value = str[2];
+//			countrycode = str[3];
+			ht_bw = str[3];
+			ht_extcha = str[4];
+			enablewireless = str[5];
+			wmmCapable = str[6];
+			APSDCapable = str[7];
+			SSID = str[8];
+			ap_isolate = str[9];
+			shootPower = str[10];
+			
+			initEnableWireless();	
+			document.getElementById("ssid").value = SSID;
+			document.getElementById("shtPower").value = shootPower;
+			ChannelOnChange(countryOptLen);
+			initExtcha();
+		} 
+	}
+}
+
+function initbasic(){
+		makeRequest("/goform/wirelessInitBasic", "something");
+}
+
+function initExtcha()
+{
+	if(PhyMode==0||PhyMode==1||PhyMode==4){
+		hideDivBand();	
+	}
+	else
+	{	
+		showDivBand();
+
+		var option_length = document.wireless_basic.n_extcha.options.length;
+		if(ht_extcha == 'upper')
+		{
+			if (option_length > 1)
+				document.wireless_basic.n_extcha.options.selectedIndex = 0;
+		}
+		else if(ht_extcha == 'lower' )
+		{
+			if (option_length > 1)
+				document.wireless_basic.n_extcha.options.selectedIndex = 1;
+		}
+		else
+			document.wireless_basic.n_extcha.options.selectedIndex = 0;
+	}	
+}
+
+function initEnableWireless(){
+	//document.getElementById("enablewirelessEx").value=1*enablewireless;
+	initValue();
+	if(enablewireless==1){
+		document.getElementById("enablewireless").checked=true;
+    	document.getElementById("setting").style.display="";
+		document.getElementById("setting").disabled=false;	
+	}else{
+		document.getElementById("enablewireless").checked=false;
+		document.getElementById("setting").style.display="none";
+		document.getElementById("setting").disabled=true;
+	}
+}
+
+function onEnableWireless()
+{
+	if(document.getElementById("enablewireless").checked == true)
+	{
+		document.getElementById("enablewireless").value=1;
+		document.getElementById("setting").style.display="";
+		document.getElementById("setting").disabled=false;
+	}else{
+		document.getElementById("enablewireless").value=0;
+		document.getElementById("setting").style.display="none";
+		document.getElementById("setting").disabled=true;	
+	}
+}
+
+//++++++++++++
+function style_display_on()
+{
+	if (window.ActiveXObject)
+	{ // IE
+		return "block";
+	}
+	else if (window.XMLHttpRequest)
+	{ // Mozilla, Safari,...
+		return "table-row";
+	}
+}
+
+function wmm_capable_enable_switch()
+{
+	document.getElementById("div_apsd_capable").style.visibility = "hidden";
+	document.getElementById("div_apsd_capable").style.display = "none";
+	document.wireless_basic.apsd_capable.disabled = true;
+
+	if (document.wireless_basic.wmm_capable[0].checked == true)
+	{
+		document.getElementById("div_apsd_capable").style.visibility = "visible";
+		document.getElementById("div_apsd_capable").style.display = style_display_on();
+		document.wireless_basic.apsd_capable.disabled = false;
+	}
+}
+
+function preSubmit(f)
+{
+   if (true==CheckValue())
+      {
+	     f.submit();
+	  }
+}
+
+function addExtchaOption(index,channelId,extcha_value){
+    /*var objSelect = document.getElementById(channelId);
+    var strName = ChannelList[index];
+    var strValue = extcha_value;
+    // 建立Option对象
+    var objOption = new Option(strName,strValue);
+ 	objSelect.add(objOption, extcha_value);*/
+	
+	var y = document.createElement('option');
+	y.text = ChannelList[index];
+	y.value = extcha_value;
+	var x = document.getElementById(channelId);
+	try{
+		x.add(y,null); 
+	}
+	catch(ex){
+		x.add(y); 
+	}
+}
+
+function ChannelOnChange(countryOptLen)
+{
+	channel_v = document.getElementById("channel").value;
+	var extcha_list1=1*channel_v - 4;
+	var extcha_list2=1*channel_v + 4;
+	var extcha_value;
+	var extcha_flag = 0;
+	document.getElementById("n_extcha").options.length=0;	//每次信道切换时需清除扩展信道选项，以便重新建立
+	if(1*document.getElementById("channel").value == 0){	//信道为auto时，扩展信道也为auto并disabled
+		addExtchaOption(0,"n_extcha",0);
+		document.getElementById("n_extcha").disabled = true;
+		return;
+	}else{
+		if (document.wireless_basic.n_bandwidth[1].checked)
+			document.getElementById("n_extcha").disabled = false;	
+		else
+			document.getElementById("n_extcha").disabled = true;
+	}
+	if(channel_v <= 4 && channel_v > 0){
+		extcha_value = 1;	
+	}else if(channel_v > countryOptLen-4){
+		extcha_value = 0;	
+	}
+	if(extcha_list1 > 0){
+		if(channel_v > 4)
+		{
+			extcha_value = 0;
+			extcha_flag = 1;
+		}
+		addExtchaOption(extcha_list1,"n_extcha",extcha_value);
+	}
+	if(extcha_list2 <= countryOptLen){
+		if(channel_v <= countryOptLen-4)
+		{
+			if (extcha_flag == 1)
+				extcha_value = 1;
+			else
+				extcha_value = 0;
+		}
+		addExtchaOption(extcha_list2,"n_extcha",extcha_value);
+	}
+}
+
+function Channel_BandWidth_onClick()
+{
+	var w_mode = document.wireless_basic.wirelessmode.options.selectedIndex;
+
+	if (document.wireless_basic.n_bandwidth[0].checked == true)
+		document.wireless_basic.n_extcha.disabled = true;
+	else
+		document.wireless_basic.n_extcha.disabled = false;
+}
+function chgWireMode()
+{
+	var wmode;
+
+	wmode = document.wireless_basic.wirelessmode.options.selectedIndex;
+	hideDivBand();
+	//2.4G mode
+	if (wmode == 3)
+	{
+		showDivBand();
+	}
+}
+
+function hideDivBand()
+{
+	document.getElementById("div_band").disabled=true;
+	document.getElementById("div_extcha").disabled=true;
+	document.getElementById("div_band").style.display="none";
+	document.getElementById("div_extcha").style.display="none";
+}
+
+function showDivBand()
+{
+		document.getElementById("div_band").disabled=false;
+		document.getElementById("div_extcha").disabled=false;
+		document.getElementById("div_band").style.display="";
+		document.getElementById("div_extcha").style.display="";
+}
+
+function initValue()
+{
+	if(broadcastssidEnable == 0){
+		document.wireless_basic.broadcastssid[0].checked=true;
+	}else{
+		document.wireless_basic.broadcastssid[1].checked=true;
+	}	
+	if ((PhyMode == 0)||(PhyMode == 1) || (PhyMode == 4) || (PhyMode == 9))
+	{
+		if (PhyMode == 0)
+			document.wireless_basic.wirelessmode.options.selectedIndex = 0;
+		else if (PhyMode == 1)
+			document.wireless_basic.wirelessmode.options.selectedIndex = 1;
+		else if (PhyMode == 4)
+			document.wireless_basic.wirelessmode.options.selectedIndex = 2;
+		else if (PhyMode == 9)
+			document.wireless_basic.wirelessmode.options.selectedIndex = 3;//5->3
+	}
+	if (wmmCapable == "on")
+	{
+		document.wireless_basic.wmm_capable[0].checked = true;
+		document.wireless_basic.wmm_capable[1].checked = false;	
+		document.getElementById("div_apsd_capable").style.visibility = "visible";
+		document.getElementById("div_apsd_capable").style.display = style_display_on();
+		//document.wireless_basic.apsd_capable.disabled = false;
+	}
+	else
+	{
+		document.wireless_basic.wmm_capable[0].checked = false;
+		document.wireless_basic.wmm_capable[1].checked = true;
+		document.getElementById("div_apsd_capable").style.visibility = "hidden";
+		document.getElementById("div_apsd_capable").style.display = "none";
+	}
+	if (APSDCapable == "on")
+	{
+		document.wireless_basic.apsd_capable[0].checked = true;
+		document.wireless_basic.apsd_capable[1].checked = false;
+	}
+	else
+	{
+		document.wireless_basic.apsd_capable[0].checked = false;
+		document.wireless_basic.apsd_capable[1].checked = true;
+	}
+	if (1*ht_bw == 0)
+	{
+		document.wireless_basic.n_bandwidth[0].checked = true;
+		document.wireless_basic.n_extcha.disabled = true;
+	}
+	else
+	{
+		document.wireless_basic.n_bandwidth[1].checked = true;
+		document.wireless_basic.n_extcha.disabled = false;
+	}
+	if (1*ap_isolate == 1)
+	{
+		document.wireless_basic.ap_isolate[0].checked = true;
+		document.wireless_basic.ap_isolate[1].checked = false;
+	}	
+	else
+	{
+		document.wireless_basic.ap_isolate[0].checked = false;
+		document.wireless_basic.ap_isolate[1].checked = true;
+	}
+	
+	document.wireless_basic.channel[channel_value].selected = true;
+}
+function CheckValue()
+{
+	//var channel_11a_index;
+	//var re =/^[0-9a-zA-Z_:]+$/;	
+	var re =/^[^\n\r,;%&]+$/;
+	var sid = document.wireless_basic.ssid.value;
+	var shtPower = document.wireless_basic.shtPower.value;
+	var reg =/^([\u4E00-\u9FA5])+$/;
+	
+	if(document.getElementById("enablewireless").checked == true){
+		document.getElementById("enablewirelessEx").value=1;	
+	}else{
+		document.getElementById("enablewirelessEx").value=0;
+	}
+	if(!re.test(sid) || sid == "")
+	{
+		alert("SSID不能为空或含有(, ; % &)！");//，或含有回车，换行
+		document.wireless_basic.ssid.focus();
+		document.wireless_basic.ssid.select();
+		return false;
+	}
+	var sidlen=sid.length;
+	var num=0;
+	for(var i=0;i<sid.length;i++)
+	{  
+		if(reg.test(sid.charAt(i)))
+	 	num++;	  
+	}
+	if((sidlen+num)>32)
+	{
+		alert("SSID不能超过32个字符(中文占2个字符)！");
+		return false;
+	}
+	
+	var t = /^[0-9]{1,4}$/;
+	
+	if(!t.test(shtPower) || parseInt(shtPower)<1 || parseInt(shtPower)>100)
+	{
+		alert("发射功率:请输入1-100之间的数字");
+		return false;
+	}
+
+	
+	var cf = document.forms[0];
+	return true;
+}
+</script>
+<link href="globe.css" type="text/css" rel="stylesheet">
+</head>
+<body onload="initbasic();" marginwidth="0" marginheight="0">
+<div class="main">
+<form action="http://192.168.0.254/goform/wirelessBasic" method="post" name="wireless_basic" id="wireless_basic">
+<input type="hidden" id="GO" name="GO" value="wireless_basic.asp">
+<input type="hidden" id="enablewirelessEx" name="enablewirelessEx">
+<table class="main">
+  <tbody><tr>
+    <td width="720" valign="top">
+      <table cellspacing="0" id="table2">
+        <tbody><tr>
+          <td class="titleCell" style="padding-left: 6px;">无线网络</td>
+        </tr>
+        <tr>
+          <td height="10"></td>
+        </tr>
+        <tr>
+          <td>
+            <table cellpadding="5" border="0">
+              <tbody><tr>
+                <td width="150">无线网络：</td>
+				<td width="540">
+				<input type="checkbox" id="enablewireless" name="enablewireless" value="1" onclick="onEnableWireless();">启用
+				</td>
+              </tr>
+			  </tbody></table>
+              <table cellpadding="5" border="0" id="setting" style="text-align: left;">
+			  <tbody><tr class="a2"> 
+				  <td width="150">SSID广播</td>
+				  <td width="540"><input type="radio" id="broadcastssid" name="broadcastssid" value="0">开启&nbsp;&nbsp;
+				<input type="radio" id="broadcastssid" name="broadcastssid" value="1">关闭</td>
+			</tr> 
+              <tr class="a1">
+            <td align="left">无线网络标识(SSID)：</td>
+			<td>
+        <input type="text" name="ssid" id="ssid" size="20" maxlength="32" value=""></td></tr> 
+    <tr class="a2">    
+      <td>模式：</td>
+      <td><select name="wirelessmode" id="wirelessmode" size="1" onchange="chgWireMode();">
+      <option value="0">11b/g混合模式</option>
+      <option value="1">11b模式</option>
+      <option value="4">11g模式</option>
+      <option value="9">11b/g/n混合模式</option></select></td></tr>
+    <tr id="div_channel" name="div_channel" class="a1">
+      <td>信道：</td>
+      <td>
+	  <select name="channel" id="channel" size="1" onchange="ChannelOnChange(countryOptLen);">
+	  	<option value="0" selected="selected">Auto</option>
+	  	<option value="1">2412MHz (Channel 1)</option>
+		<option value="2">2417MHz (Channel 2)</option>
+		<option value="3">2422MHz (Channel 3)</option>
+		<option value="4">2427MHz (Channel 4)</option>
+		<option value="5">2432MHz (Channel 5)</option>
+		<option value="6">2437MHz (Channel 6)</option>
+		<option value="7">2442MHz (Channel 7)</option>
+		<option value="8">2447MHz (Channel 8)</option>
+		<option value="9">2452MHz (Channel 9)</option>
+		<option value="10">2457MHz (Channel 10)</option>
+		<option value="11">2462MHz (Channel 11)</option>
+		<option value="12">2467MHz (Channel 12)</option>
+		<option value="13">2472MHz (Channel 13)</option>
+	  </select>  	
+	  </td>
+      </tr>
+  <tr id="div_band" class="a2">
+     <td>信道带宽：</td>
+     <td>
+      <input type="radio" name="n_bandwidth" value="0" onclick="Channel_BandWidth_onClick()" checked="checked">20&nbsp;
+      <input type="radio" name="n_bandwidth" value="1" onclick="Channel_BandWidth_onClick()">20/40</td>
+  </tr>
+  <tr id="div_extcha" class="a1">
+     <td>扩展信道：</td>
+     <td>
+      <select id="n_extcha" name="n_extcha" size="1" disabled="">
+      <option value="0">Auto</option></select></td>
+  </tr>
+
+  <tr class="a2">
+    <td>发射功率：</td>
+    <td>
+        <input type="text" name="shtPower" id="shtPower" size="20" maxlength="3" value=""> &nbsp;
+    </td>
+  </tr>
+  
+ <tr class="a1">
+    <td>WMM Capable：</td>
+    <td>
+        <input type="radio" name="wmm_capable" value="on" onclick="wmm_capable_enable_switch()" checked="checked">开启 &nbsp;
+        <input type="radio" name="wmm_capable" value="off" onclick="wmm_capable_enable_switch()">关闭
+    </td>
+  </tr>
+  <tr id="div_apsd_capable" name="div_apsd_capable" class="a2" style="visibility: visible; display: table-row;">
+    <td>APSD Capable：</td>
+    <td>
+        <input type="radio" name="apsd_capable" value="on">开启 &nbsp;
+        <input type="radio" name="apsd_capable" value="off" checked="checked">关闭
+    </td>
+  </tr><!-- end setting -->   
+  <tr id="div_ap_isolate" name="div_ap_isolate" class="a1">
+    <td>AP 隔离：</td>
+    <td>
+        <input type="radio" name="ap_isolate" value="1">开启 &nbsp;
+        <input type="radio" name="ap_isolate" value="0" checked="checked">关闭
+    </td>
+  </tr>
+            </tbody></table>
+          </td>
+        </tr>
+      </tbody></table>
+    </td>
+    <td width="100" align="center" valign="top">
+      <table cellspacing="0" id="table1" style="text-align: left;">
+        <tbody><tr class="a2">
+          <td>
+          <script>tbl_tail_save("document.wireless_basic","wl_basic");</script></td><td class="vline" rowspan="3"></td><td rowspan="3" valign="top" width="80" align="center"><br><input class="actButton" type="button" value="保 存" onmouseover="style.color=&#39;#ff9933&#39;" onmouseout="style.color=&#39;#000000&#39;" onclick="preSubmit(document.wireless_basic)"><br><br><input class="actButton" type="button" value="还 原" onmouseover="style.color=&#39;#f93&#39;" onmouseout="style.color=&#39;#000000&#39;" onclick="window.location.reload()" style="color: rgb(0, 0, 0);"><br><br><input class="actButton" type="button" value="帮 助" onmouseover="style.color=&#39;#f93&#39;" onmouseout="style.color=&#39;#000000&#39;" onclick="doHelp(&#39;wl_basic&#39;)"></td></tr><tr class="a1"><td class="hline" colspan="2"></td><td style="height:1px;"></td><td></td></tr></tbody></table> 
+          </td>
+        </tr>
+      </tbody></table>
+    
+  
+
+<br><br>
+ </form>
+</div>
+<script>
+table_onload("table1");
+table_onload("setting");
+</script>
+</body></html>

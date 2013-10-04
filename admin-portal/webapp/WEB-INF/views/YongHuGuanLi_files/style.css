@@ -1,0 +1,264 @@
+@charset "utf-8";
+body{background:url(../images/bgline.gif) repeat;}
+table{border-collapse:separate;}
+
+A:link {
+	FONT-WEIGHT: bold; FONT-SIZE: 10pt; COLOR: #000000; FONT-FAMILY: ""; LETTER-SPACING: 1px;line-height: 18px; TEXT-DECORATION: none
+}
+A:visited {
+	FONT-WEIGHT: bold; FONT-SIZE: 10pt; COLOR: #000000; FONT-FAMILY: ""; LETTER-SPACING: 1px;line-height: 18px; TEXT-DECORATION: none
+}
+A:active {
+	FONT-SIZE: 10pt; COLOR: #ffffff; TEXT-DECORATION: none
+}
+A:hover {
+	FONT-SIZE: 10pt; COLOR: #ffffff; TEXT-DECORATION: none
+}
+A.bottom:link {
+	FONT-WEIGHT: normal; FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: ""; LETTER-SPACING: 1px;line-height: 18px; TEXT-DECORATION: none
+}
+A.bottom:visited {
+	FONT-WEIGHT: normal; FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: ""; LETTER-SPACING: 1px;line-height: 18px; TEXT-DECORATION: none
+}
+A.bottom:active {
+	FONT-WEIGHT: normal; FONT-SIZE: 9pt; COLOR: #ffffff; line-height: 18px; LETTER-SPACING: 1px; TEXT-DECORATION: none
+}
+A.bottom:hover {
+	FONT-WEIGHT: normal; FONT-SIZE: 9pt; COLOR: #ffffff; line-height: 18px; LETTER-SPACING: 1px; TEXT-DECORATION: none
+}
+A.content:link {
+	FONT-WEIGHT: normal; FONT-SIZE: 10pt; COLOR: #000000; FONT-FAMILY: ""; LETTER-SPACING: 1px;line-height: 18px; TEXT-DECORATION: none
+}
+A.content:visited {
+	FONT-WEIGHT: normal; FONT-SIZE: 10pt; COLOR: #000000; FONT-FAMILY: ""; LETTER-SPACING: 1px;line-height: 18px; TEXT-DECORATION: none
+}
+A.content:active {
+	FONT-WEIGHT: normal; FONT-SIZE: 10pt; COLOR: #ffffff; line-height: 18px; LETTER-SPACING: 1px; TEXT-DECORATION: none
+}
+A.content:hover {
+	FONT-WEIGHT: normal; FONT-SIZE: 10pt; COLOR: #ffffff; line-height: 18px; LETTER-SPACING: 1px; TEXT-DECORATION: none
+}
+.text1m{
+	FONT-WEIGHT: normal; FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: ""; LETTER-SPACING: 1px;line-height: 18px;
+}
+.text1 {
+	FONT-SIZE: 10pt; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.text1r {
+	FONT-WEIGHT: bold; FONT-SIZE: 10pt; COLOR: #ffffff; FONT-FAMILY: "", "Times New Roman"
+}
+.text1b {
+	FONT-WEIGHT: bold; FONT-SIZE: 10pt; FONT-FAMILY: "", "Times New Roman"
+}
+.title1 {
+	FONT-SIZE: 14pt; COLOR: #808080; FONT-FAMILY: "", "Times New Roman"
+}
+.title2 {
+	FONT-SIZE: 14pt; COLOR: #465f88; FONT-FAMILY: "", "Times New Roman"
+}
+.title3 {
+	FONT-SIZE: 12pt; COLOR: #465f88; FONT-FAMILY: "", "Times New Roman"
+}
+.menu1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 12pt; COLOR: #dddddd; FONT-FAMILY: "", "Times New Roman"
+}
+.menu2 {
+	FONT-SIZE: 12pt; COLOR: #ffffff; FONT-FAMILY: "", "Times New Roman"
+}
+.xitem1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 10pt; COLOR: #000000; FONT-FAMILY: "", "Times New Roman"; BACKGROUND-COLOR: #465f88
+}
+.xvalue1 {
+	FONT-SIZE: 10pt; FONT-FAMILY: "", "Times New Roman"; BACKGROUND-COLOR: #d2d6e7
+}
+.style1 {
+	FONT-WEIGHT: bold; COLOR: #ffffff; padding-left:12px
+}
+TD.title {
+	FONT-SIZE: 12px; COLOR: #000000; HEIGHT: 24px; BACKGROUND-COLOR: #ffffff
+}
+TD.vline {
+	WIDTH: 1px; COLOR: #CCCCCC; BACKGROUND-COLOR: #CCCCCC
+}
+TD.hline {
+	COLOR: #CCCCCC; HEIGHT: 1px; BACKGROUND-COLOR: #CCCCCC
+}
+.space {
+	margin:0px;
+}
+.space1 {
+	margin-left:15px;border-collapse: collapse;border-spacing: 0;
+	margin-left:15px;
+}
+input.button {
+	BACKGROUND-COLOR: #ddddff; border: #000 1px groove; COLOR: #000000; FONT-SIZE: 12px; FONT-STYLE: normal; FONT-VARIANT: normal; FONT-WEIGHT: normal; HEIGHT: 18px; LINE-HEIGHT: normal; cursor:pointer; padding:0px;/* border-radius:4px;*/ padding-left:5px; padding-right:5px; border:1px outset #333; _padding-top:2px;}
+input.button:hover{/*background-color:#666666;*/ color:#ff9933}
+input.text {
+	BORDER-BOTTOM: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; COLOR: #000000; FONT-SIZE: 12px; FONT-STYLE: normal; FONT-VARIANT: normal; FONT-WEIGHT: normal; HEIGHT: 18px; LINE-HEIGHT: normal; PADDING-LEFT: 3px; PADDING-RIGHT: 3px;
+}input.buttonface {
+	BACKGROUND-COLOR: #ddddff; BORDER-BOTTOM: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; COLOR: #000000; FONT-SIZE: 12px; FONT-STYLE: normal; FONT-VARIANT: normal; FONT-WEIGHT: normal; HEIGHT: 18px; LINE-HEIGHT: normal
+}
+
+input.textspecial {
+	BORDER-BOTTOM: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; COLOR: #000000; FONT-SIZE: 12px; FONT-STYLE: normal; FONT-VARIANT: normal; FONT-WEIGHT: normal; HEIGHT: 18px; LINE-HEIGHT: normal
+}
+TD.tail {
+	FONT-SIZE: 12px; HEIGHT: 25px
+}
+BODY {
+	BACKGROUND-COLOR: #ffffff; COLOR: #000000; FONT-FAMILY: "", "Times New Roman"; FONT-SIZE: 75%; PADDING-LEFT: 0px; PADDING-TOP: 0px
+}
+
+SELECT.list {
+	BORDER-BOTTOM: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; COLOR: #000000; FONT-SIZE: 12px; FONT-STYLE: normal; FONT-VARIANT: normal; FONT-WEIGHT: normal; HEIGHT: 18px; LINE-HEIGHT: normal
+}
+
+caption { font-size:13px; background-color:#999; LINE-HEIGHT:20px; vertical-align:middle}
+TD {
+	FONT-SIZE: 12px; LINE-HEIGHT: 18px; TEXT-DECORATION: none
+}
+TD.top {
+	FONT-SIZE: 12px; LINE-HEIGHT: 18px; TEXT-DECORATION: none; VERTICAL-ALIGN: top
+}
+TH {
+	FONT-SIZE: 12px; LINE-HEIGHT: 18px; TEXT-DECORATION: none
+}
+
+
+#Layer1 {
+	position:absolute;
+	right:0px;
+	top:0px;
+	width:170px;
+	height:400px;
+	z-index:1;
+}
+
+#Layer2 {
+	position:absolute;
+	left:650px;
+	top:0px;
+	width:170px;
+	height:400px;
+	z-index:1;
+}
+
+#listTb td{ border-bottom:solid 1px #0096db;border-right:solid 1px #0096db; padding:5px 2px 5px 2px; line-height:12px; }
+#listTb th{ border-bottom:solid 1px #0096db;border-right:solid 1px #0096db; padding:2px}
+#listTb { border-top:solid 1px #0096db;border-left:solid 1px #0096db; }
+#optico img{ border:none; padding:2px; margin-left:1px}
+#popDiv { position:absolute; margin:auto; background:#FFFFFF; padding:0px}
+#popDiv table {margin:0px; text-align:left}
+#closebutton {width:16px; height:16px;  float: right; margin:3px 3px 0px 0px; cursor:pointer; padding:0px; line-height:16px; font-size:14px; }
+#popDiv label{ width:100%}
+.setContent{  border:solid 1px #666699; background:#FFFFDD; text-align:left;margin:-14px 1px 0px 1px; padding:5px 10px 5px 20px; position:relative}
+.timebutton1{
+	width:55px;
+	BACKGROUND-COLOR: #CCCCCC; BORDER-BOTTOM: #CCCCCC 1px solid; BORDER-LEFT: #CCCCCC 1px solid; BORDER-RIGHT: #CCCCCC 1px solid; BORDER-TOP: #CCCCCC 1px solid; COLOR: #000000; FONT-SIZE: 12px; FONT-STYLE: normal; FONT-VARIANT: normal; FONT-WEIGHT: normal; HEIGHT: 18px; cursor:pointer; text-align:center;
+}
+.timebutton2{
+	width:30px;
+	BACKGROUND-COLOR: #CCCCCC; BORDER-BOTTOM: #CCCCCC 1px solid; BORDER-LEFT: #CCCCCC 1px solid; BORDER-RIGHT: #CCCCCC 1px solid; BORDER-TOP: #CCCCCC 1px solid; COLOR: #000000; FONT-SIZE: 12px; FONT-STYLE: normal; FONT-VARIANT: normal; FONT-WEIGHT: normal; HEIGHT: 18px; cursor:pointer; text-align:center;
+}
+.timebutton3{
+	width:10px;
+	BACKGROUND-COLOR: #ffffff; BORDER-BOTTOM: #CCCCCC 1px solid; BORDER-LEFT: #CCCCCC 1px solid; BORDER-RIGHT: #CCCCCC 1px solid; BORDER-TOP: #CCCCCC 1px solid; COLOR: #000000; HEIGHT: 18px; cursor:pointer; text-align:center;
+}
+.timebutton4{
+	width:10px;
+	BACKGROUND-COLOR: #0080ff; BORDER-BOTTOM: #CCCCCC 1px solid; BORDER-LEFT: #CCCCCC 1px solid; BORDER-RIGHT: #CCCCCC 1px solid; BORDER-TOP: #CCCCCC 1px solid; COLOR: #000000; HEIGHT: 18px; cursor:pointer; text-align:center;
+}
+
+.select * {
+	margin: 2px;
+	padding: 0;
+}
+.select {
+	border:1px solid #000000;
+	display: inline;
+}
+
+.select div {
+	border:1px solid #f9f9f9;
+	float: left;
+}
+
+.select>div {
+	height: 17px;
+	overflow:hidden;
+}
+
+* html .select div select {
+	display:block;
+	float: left;
+	margin: -2px;
+}
+.select div>select {
+	display:block;
+	float:none;
+	margin: -2px;
+	padding: 0px;
+}
+
+.select select>option {
+	text-indent: 2px; //option在FF等非IE浏览器缩进2px
+}
+
+.divbody{
+	position:absolute;
+	top:0px;
+	left:0px;
+	padding:0px;
+	text-align:left;
+}
+.divhead{
+	margin:none;
+	height:30px; 
+	border-bottom: solid 2px #666666;
+	width:100%;;  
+	background-color:#CCCCCC; 
+	overflow:hidden; 
+	vertical-align:middle;
+	left:80px;
+	text-align:left; 
+	line-height:30px;
+}
+
+div.body{
+	position:absolute; left:60px; top:50px;
+}
+
+
+.a1{
+    background-color:#dddddd;
+    cursor:default;
+}
+.a2{
+		background-color:#eeeeee;
+    cursor:default;
+}
+.a3{
+		background-color:#bbbbbb;
+    	cursor:default;
+}
+.a4{
+		background-color:#0096db;
+    	cursor:default;
+}
+table.t1{
+  border:0px solid #0096db;
+  color:#333;	
+  text-align:left;
+  vertical-align:middle;
+  font-size:12px;
+}
+.blue{ color:green}
+#table_contain { padding-top:18px}
+#table_contain td{ padding:2px 5px}
+* html #gbx_overlay {
+    position:absolute; /*IE does not work with position fixed*/
+    top:expression((0 + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop)) + 'px'); 
+    right: expression((0 + (ignoreMe2 = document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft)) + 'px');
+    width:110%;
+}
+.vexpl{ color:blank}
