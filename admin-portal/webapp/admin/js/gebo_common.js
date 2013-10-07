@@ -23,9 +23,9 @@
 				lastWindowHeight = $(window).height();
 				lastWindowWidth = $(window).width();
 				gebo_sidebar.update_scroll();
-				if(!is_touch_device()){
-                    $('.sidebar_switch').qtip('hide');
-                }
+//				if(!is_touch_device()){
+//                    $('.sidebar_switch').qtip('hide');
+//                }
 			}
 		});
 		//* tooltips
