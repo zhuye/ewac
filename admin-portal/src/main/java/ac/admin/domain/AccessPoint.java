@@ -10,54 +10,83 @@ import java.io.Serializable;
 @Table(name="t_accesspoint")
 public class AccessPoint implements Serializable
 {
+	private Long apid;
+	
 	private String ip;
 
 	private String mac;
 	
 	private String name;
 	
-	private String name;
-
-    private String password;
+	private String building;
+	
+	private String floor;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Long getUserid()
+	public Long getApid()
 	{
-		return userid;
+		return apid;
 	}
 
-	public void setUserid(Long userid)
+	public void setUserid(Long apid)
 	{
-		this.userid = userid;
+		this.apid = apid;
 	}
 
-	public String getUsername()
+	public String getName()
 	{
-		return username;
+		return name;
 	}
 
-	public void setUsername(String username)
+	public void setName(String name)
 	{
-		this.username = username;
+		this.name = name;
 	}
 
-    public String getPassword()
-    {
-        return password;
-    }
+    public String getIp() {
+		return ip;
+	}
 
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 
-    @Override
+	public String getMac() {
+		return mac;
+	}
+
+	public void setMac(String mac) {
+		this.mac = mac;
+	}
+
+	public String getBuilding() {
+		return building;
+	}
+
+	public void setBuilding(String building) {
+		this.building = building;
+	}
+
+	public String getFloor() {
+		return floor;
+	}
+
+	public void setFloor(String floor) {
+		this.floor = floor;
+	}
+
+	public void setApid(Long apid) {
+		this.apid = apid;
+	}
+
+	@Override
 	public String toString()
 	{
-		return "UserInfo{" +
+		return null;
+/*		return "UserInfo{" +
 				"userid=" + userid +
 				", username='" + username + '\'' +
-				'}';
+				'}';*/
 	}
 }
